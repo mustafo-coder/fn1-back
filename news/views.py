@@ -58,15 +58,14 @@ class ArticleUpdateAPIView(APIView):
 
 # DELETE uchun Login Required API
 class ArticleDeleteAPIView(APIView):
-    permission_classes = [IsAuthenticated]  # Login talab qilinadi
-
-    def delete(self, request, pk):
+    permission_classes = [IsAuthenticated] 
+    def delete(self, request, pk, format=None):
         try:
             article = Article.objects.get(pk=pk)
             article.delete()
-            return Response({"message": "Article deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': 'Article deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
         except Article.DoesNotExist:
-            return Response({"error": "Article not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Article not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class ArticleRetrieveAPIView(APIView):
     permission_classes = [AllowAny]  # Login talab qilinmaydi
