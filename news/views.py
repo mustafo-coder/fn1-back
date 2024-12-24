@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Article
-from .serializers import ArticleSerializer, CustomUserUpdateSerializer
+from .serializers import ArticleSerializer
 from django.db.models import Q
 
 # GET uchun Login Required bo'lmagan API
@@ -79,16 +79,7 @@ class ArticleRetrieveAPIView(APIView):
         # Serializer yaratish va maqolani javob sifatida qaytarish
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
-class UpdateUserView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def put(self, request, *args, **kwargs):
-        user = request.user
-        serializer = CustomUserUpdateSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class ArticleSearchAPIView(APIView):
     permission_classes = [AllowAny]  # Login talab qilinmaydi
 

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from .models import CustomUser
-from .serializers import SignupSerializer, LoginSerializer, UserSerializer
+from .serializers import SignupSerializer, LoginSerializer, UserSerializer, CustomUserUpdateSerializer
 from django.contrib.auth import authenticate
 
 
@@ -47,3 +47,14 @@ class UserDetailAPIView(APIView):
         user = request.user
         serializer = UserSerializer(user)  # UserSerializer orqali foydalanuvchi ma'lumotlarini seriyalash
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UpdateUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        serializer = CustomUserUpdateSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
