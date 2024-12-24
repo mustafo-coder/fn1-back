@@ -19,7 +19,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     age = models.IntegerField(blank=True, null=True)  # Optional
     gender = models.CharField(max_length=10, blank=True, null=True)  # Optional
-    image = models.URLField(blank=True, null=True)  # Optional
+    image = models.ImageField(blank=True, null=True)  # Optional
     name = models.CharField(max_length=255, blank=True, null=True)  # Optional
 
     objects = CustomUserManager()
