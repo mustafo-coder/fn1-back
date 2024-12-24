@@ -79,7 +79,16 @@ class ArticleRetrieveAPIView(APIView):
         # Serializer yaratish va maqolani javob sifatida qaytarish
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
+class UpdateUserView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        serializer = CustomUserUpdateSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class ArticleSearchAPIView(APIView):
     permission_classes = [AllowAny]  # Login talab qilinmaydi
 

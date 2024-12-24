@@ -7,6 +7,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['id', 'username', 'email', 'name', 'age', 'gender', 'image']
 
+class CustomUserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'age', 'gender', 'image', 'name']
+        read_only_fields = ['email']  # Email o'zgartirilmasligi uchun
+
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
