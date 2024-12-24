@@ -79,3 +79,22 @@ class ArticleRetrieveAPIView(APIView):
         # Serializer yaratish va maqolani javob sifatida qaytarish
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
+
+class ArticleSearchAPIView(APIView):
+    permission_classes = [AllowAny]  # Login talab qilinmaydi
+
+    def get(self, request):
+        query = request.GET.get('query', '')
+        if not query:
+            return Response({"error": "Search query is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Qidiruvni amalga oshirish
+        articles = Article.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(author__icontains=query)
+        )
+
+        if not articles.exists():
+            return Response({"message": "No articles found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ArticleSerializer(articles, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
